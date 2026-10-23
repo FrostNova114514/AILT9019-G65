@@ -1,0 +1,29 @@
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Microsoft Office temporary files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Temporary and backup files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Python artifacts and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Course reference materials not produced by the project team
+Course Overview_*.pdf
+student-guide_*.pdf
+AILT9019_Proposal_Peer_Review_Rubrics_*.pdf
+AILT9019_Consultation_Zoom_Links_*.pdf
+proposal/*Template*.docx
