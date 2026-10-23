@@ -17,6 +17,9 @@
 # Python artifacts and local environments
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
 .venv/
 venv/
 .env

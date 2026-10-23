@@ -87,28 +87,33 @@ The core application processes text locally. Uploaded content is not intended to
 
 ## Running the Application
 
-The application is currently under development. Once the first working version is added, the expected setup will be:
+The working prototype is located in `Demo/`. Python 3.11–3.13 is recommended.
 
 ```bash
-python3 -m venv .venv
+cd Demo
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The application will then open as a local browser-based web app. It is not planned as a native desktop or mobile application.
+The application will open at `http://localhost:8501` as a local browser-based web app. It is not a native desktop or mobile application and does not require an external API.
 
 ## Repository Structure
 
 ```text
 AILT9019/
-├── proposal/      Project proposal documents
-├── README.md      Project overview and usage guide
-└── .gitignore     Files excluded from version control
+├── Demo/
+│   ├── app.py                 Streamlit web interface
+│   ├── character_network/     Analysis and visualization modules
+│   ├── sample_data/           Built-in demonstration text
+│   ├── tests/                 Automated tests
+│   └── requirements.txt       Python dependencies
+├── proposal/                  Project proposal documents
+├── README.md                  Project overview and usage guide
+└── .gitignore                 Files excluded from version control
 ```
-
-The repository structure will be expanded as the source code, tests, sample data, and final project materials are developed.
 
 ## Project Status
 
-**In development.** The revised proposal has been completed, and the next stage is to implement and test the minimum end-to-end prototype.
+**Working prototype.** The current Demo supports local English-text input, person-name detection, explicit alias normalization, paragraph or sliding-window co-occurrence analysis, an interactive network graph, safe input validation, and HTML/CSV exports. Further evaluation on full public-domain novels and final presentation materials remain in progress.
