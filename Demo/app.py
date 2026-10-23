@@ -23,6 +23,7 @@ from character_network.visualization import (
 
 APP_DIRECTORY = Path(__file__).resolve().parent
 SAMPLE_PATH = APP_DIRECTORY / "sample_data" / "sample_story.txt"
+STYLE_PATH = APP_DIRECTORY / "assets" / "liquid_glass.css"
 DEFAULT_ALIASES = {
     "Lizzy": "Elizabeth Bennet",
     "Elizabeth": "Elizabeth Bennet",
@@ -39,47 +40,19 @@ DEFAULT_ALIASES = {
 
 st.set_page_config(
     page_title="Character Relationship Network",
-    page_icon="🕸️",
+    page_icon="◉",
     layout="wide",
 )
 
 st.markdown(
-    """
-    <style>
-      .stApp { background: #f7f8fc; }
-      .block-container { max-width: 1320px; padding-top: 2.2rem; }
-      .hero {
-        padding: 1.4rem 1.6rem;
-        border-radius: 18px;
-        color: white;
-        background: linear-gradient(125deg, #17223b 0%, #334e8a 55%, #6941c6 100%);
-        box-shadow: 0 18px 45px rgba(23, 34, 59, 0.16);
-        margin-bottom: 1.25rem;
-      }
-      .hero h1 { margin: 0 0 .35rem 0; font-size: 2.25rem; }
-      .hero p { margin: 0; max-width: 850px; opacity: .9; font-size: 1.03rem; }
-      .notice {
-        border-left: 4px solid #f0a43c;
-        background: #fff8e9;
-        color: #5f4318;
-        border-radius: 8px;
-        padding: .8rem 1rem;
-        margin-bottom: 1rem;
-      }
-      div[data-testid="stMetric"] {
-        background: white;
-        border: 1px solid #e6e9f2;
-        padding: .8rem 1rem;
-        border-radius: 12px;
-      }
-    </style>
-    """,
+    f"<style>{STYLE_PATH.read_text(encoding='utf-8')}</style>",
     unsafe_allow_html=True,
 )
 
 st.markdown(
     """
     <section class="hero">
+      <div class="hero-badge">Private on-device analysis</div>
       <h1>Character Relationship Network</h1>
       <p>Turn English long-form text into an interactive map of character co-occurrences. Everything runs locally in this demo.</p>
     </section>
@@ -88,7 +61,7 @@ st.markdown(
 )
 st.markdown(
     """
-    <div class="notice"><strong>Interpret carefully:</strong> an edge means that two names occur near each other in the text. It does not establish whether they are friends, relatives, enemies, or romantic partners.</div>
+    <div class="notice"><span class="notice-icon">i</span><span><strong>Interpret carefully:</strong> an edge means that two names occur near each other in the text. It does not establish whether they are friends, relatives, enemies, or romantic partners.</span></div>
     """,
     unsafe_allow_html=True,
 )

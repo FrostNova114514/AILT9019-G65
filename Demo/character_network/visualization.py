@@ -77,8 +77,8 @@ def create_network_figure(graph: nx.Graph) -> go.Figure:
     figure.update_layout(
         height=680,
         margin={"l": 15, "r": 15, "t": 30, "b": 15},
-        paper_bgcolor="#f7f8fc",
-        plot_bgcolor="#f7f8fc",
+        paper_bgcolor="rgba(0, 0, 0, 0)",
+        plot_bgcolor="rgba(0, 0, 0, 0)",
         hovermode="closest",
         xaxis={"visible": False},
         yaxis={"visible": False},
