@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "mode": "paragraph",
+    "window_size": 120,
+    "minimum_edge_weight": 1,
+    "minimum_mentions": 2,
+    "maximum_characters": 40,
+    "auto_merge": true,
+    "alias_count": 48,
+    "manual_names": [],
+    "excluded_names": [
+      "Netherfield",
+      "Longbourn",
+      "Meryton"
+    ],
+    "require_english": true
+  },
+  "metrics": {
+    "nodes": 13,
+    "edges": 34,
+    "density": 0.4359,
+    "average_degree": 5.23,
+    "components": 1,
+    "average_weight": 1.71,
+    "maximum_weight": 6
+  },
+  "chapters": [
+    "Chapter I",
+    "Chapter II",
+    "Chapter III"
+  ],
+  "characters": [
+    {
+      "character": "Charles Bingley",
+      "mentions": 23,
+      "connections": 10,
+      "weighted_degree": 26,
+      "betweenness": 0.6616,
+      "community": 1
+    },
+    {
+      "character": "Mr Bennet",
+      "mentions": 16,
+      "connections": 7,
+      "weighted_degree": 12,
+      "betweenness": 0.0076,
+      "community": 1
+    },
+    {
+      "character": "Elizabeth Bennet",
+      "mentions": 12,
+      "connections": 8,
+      "weighted_degree": 17,
+      "betweenness": 0.346,
+      "community": 1
+    },
+    {
+      "character": "Mrs Bennet",
+      "mentions": 8,
+      "connections": 6,
+      "weighted_degree": 10,
+      "betweenness": 0.1364,
+      "community": 2
+    },
+    {
+      "character": "Fitzwilliam Darcy",
+      "mentions": 6,
+      "connections": 6,
+      "weighted_degree": 10,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Jane Bennet",
+      "mentions": 6,
+      "connections": 5,
+      "weighted_degree": 9,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Mrs Long",
+      "mentions": 6,
+      "connections": 1,
+      "weighted_degree": 1,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Mary Bennet",
+      "mentions": 4,
+      "connections": 5,
+      "weighted_degree": 5,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Lady Lucas",
+      "mentions": 3,
+      "connections": 3,
+      "weighted_degree": 6,
+      "betweenness": 0.0871,
+      "community": 2
+    },
+    {
+      "character": "Kitty Bennet",
+      "mentions": 3,
+      "connections": 2,
+      "weighted_degree": 2,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Caroline Bingley",
+      "mentions": 2,
+      "connections": 8,
+      "weighted_degree": 9,
+      "betweenness": 0.0,
+      "community": 1
+    },
+    {
+      "character": "Mrs Hurst",
+      "mentions": 2,
+      "connections": 4,
+      "weighted_degree": 5,
+      "betweenness": 0.0,
+      "community": 2
+    },
+    {
+      "character": "Sir William Lucas",
+      "mentions": 2,
+      "connections": 3,
+      "weighted_degree": 4,
+      "betweenness": 0.0,
+      "community": 2
+    }
+  ],
+  "relationships": [
+    {
+      "source": "Charles Bingley",
+      "target": "Elizabeth Bennet",
+      "cooccurrence_count": 6,
+      "example": "Bingley will be very glad to see you; and I will send a few lines by you to assure him of my hearty consent to his marrying whichever he chooses of the girls--though I must throw in a good word for m…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Fitzwilliam Darcy",
+      "cooccurrence_count": 4,
+      "example": "Bingley was good-looking and gentlemanlike: he had a pleasant countenance, and easy, unaffected manners. His sisters were fine women, with an air of decided fashion. His brother-in-law, Mr. Hurst, me…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Mr Bennet",
+      "cooccurrence_count": 4,
+      "example": "Bennet was among the earliest of those who waited on Mr. Bingley"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Mrs Bennet",
+      "cooccurrence_count": 3,
+      "example": "Bennet, however, with the assistance of her five daughters, could ask on the subject, was sufficient to draw from her husband any satisfactory description of Mr. Bingley. They attacked him in various…"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Jane Bennet",
+      "cooccurrence_count": 3,
+      "example": "Lizzy is not a bit better than the others: and I am sure she is not half so handsome as Jane"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 2,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Jane Bennet",
+      "cooccurrence_count": 2,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Lady Lucas",
+      "cooccurrence_count": 2,
+      "example": "Bennet, however, with the assistance of her five daughters, could ask on the subject, was sufficient to draw from her husband any satisfactory description of Mr. Bingley. They attacked him in various…"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Fitzwilliam Darcy",
+      "cooccurrence_count": 2,
+      "example": "Elizabeth Bennet had been obliged, by the scarcity of gentlemen, to sit down for two dances; and during part of that time, Mr. Darcy had been standing near enough for her to overhear a conversation b…"
+    },
+    {
+      "source": "Lady Lucas",
+      "target": "Sir William Lucas",
+      "cooccurrence_count": 2,
+      "example": "William and Lady Lucas"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Elizabeth Bennet",
+      "cooccurrence_count": 2,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Jane Bennet",
+      "cooccurrence_count": 2,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mrs Bennet",
+      "target": "Lady Lucas",
+      "cooccurrence_count": 2,
+      "example": "Bennet, however, with the assistance of her five daughters, could ask on the subject, was sufficient to draw from her husband any satisfactory description of Mr. Bingley. They attacked him in various…"
+    },
+    {
+      "source": "Mrs Bennet",
+      "target": "Mrs Hurst",
+      "cooccurrence_count": 2,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Caroline Bingley",
+      "target": "Mrs Hurst",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Mary Bennet",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Mrs Hurst",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Charles Bingley",
+      "target": "Sir William Lucas",
+      "cooccurrence_count": 1,
+      "example": "Bennet, however, with the assistance of her five daughters, could ask on the subject, was sufficient to draw from her husband any satisfactory description of Mr. Bingley. They attacked him in various…"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Kitty Bennet",
+      "cooccurrence_count": 1,
+      "example": "Kitty, fretfully. “When is your next ball to be, Lizzy"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Mary Bennet",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Elizabeth Bennet",
+      "target": "Mrs Long",
+      "cooccurrence_count": 1,
+      "example": "Elizabeth, “that we shall meet him at the assemblies, and that Mrs. Long"
+    },
+    {
+      "source": "Fitzwilliam Darcy",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Fitzwilliam Darcy",
+      "target": "Mrs Hurst",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Jane Bennet",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Jane Bennet",
+      "target": "Mary Bennet",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mary Bennet",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Fitzwilliam Darcy",
+      "cooccurrence_count": 1,
+      "example": "Bennet protested against any description of finery. She was therefore obliged to seek another branch of the subject, and related, with much bitterness of spirit, and some exaggeration, the shocking r…"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Kitty Bennet",
+      "cooccurrence_count": 1,
+      "example": "Kitty, you may cough as much as you choose,” said Mr. Bennet"
+    },
+    {
+      "source": "Mr Bennet",
+      "target": "Mary Bennet",
+      "cooccurrence_count": 1,
+      "example": "Bingley had danced with her twice, and she had been distinguished by his sisters. Jane was as much gratified by this as her mother could be, though in a quieter way. Elizabeth felt Jane’s pleasure. M…"
+    },
+    {
+      "source": "Mrs Bennet",
+      "target": "Caroline Bingley",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Mrs Bennet",
+      "target": "Fitzwilliam Darcy",
+      "cooccurrence_count": 1,
+      "example": "Bingley had soon made himself acquainted with all the principal people in the room: he was lively and unreserved, danced every dance, was angry that the ball closed so early, and talked of giving one…"
+    },
+    {
+      "source": "Mrs Bennet",
+      "target": "Sir William Lucas",
+      "cooccurrence_count": 1,
+      "example": "Bennet, however, with the assistance of her five daughters, could ask on the subject, was sufficient to draw from her husband any satisfactory description of Mr. Bingley. They attacked him in various…"
+    }
+  ],
+  "auto_merges": [],
+  "warnings": [],
+  "elapsed_seconds": 0.41
+}

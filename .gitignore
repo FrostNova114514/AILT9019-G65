@@ -24,6 +24,13 @@ htmlcov/
 venv/
 .env
 
+# Local analysis output (regenerate with cli.py or the app)
+Demo/output/
+output/
+
+# Raw Gutenberg downloads; the cleaned novels in evaluation/data are committed
+evaluation/data/*_raw.txt
+
 # Course reference materials not produced by the project team
 Course Overview_*.pdf
 student-guide_*.pdf
