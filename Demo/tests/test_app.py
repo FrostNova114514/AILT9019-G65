@@ -21,6 +21,19 @@ def test_app_starts_without_errors_and_shows_instructions():
     assert "does not establish" in text
 
 
+def test_hero_badge_matches_the_configured_key_state(monkeypatch):
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    monkeypatch.setattr(llm, "KEY_FILES", ())
+    app = _app()
+    text = " ".join(str(block.value) for block in app.markdown)
+    assert "AI cast list optional" in text
+    # The old hero claimed there was no API key at all, which stopped being true.
+    assert "no api key" not in text.casefold()
+
+    footer = " ".join(str(caption.value) for caption in app.caption)
+    assert "nothing is sent anywhere unless" in footer
+
+
 def test_sample_runs_end_to_end_and_exports_result():
     app = _app()
     next(button for button in app.button if button.label == "Load short sample").click().run()

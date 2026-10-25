@@ -136,10 +136,18 @@ def _summary_payload(result: AnalysisResult) -> dict:
 
 state = _state()
 
+# State what is true in this session: the pipeline is local, and the DeepSeek cast list
+# is an optional extra used only when a key is configured and the toggle is on.
+badge = (
+    "Local processing · AI cast list available"
+    if key_source()
+    else "Local processing · AI cast list optional · no key needed"
+)
+
 st.markdown(
-    """
+    f"""
     <section class="hero">
-      <div class="hero-badge">Runs locally · no account · no API key</div>
+      <div class="hero-badge">{badge}</div>
       <h1>Character Relationship Network</h1>
       <p>Turn an English novel into an interactive map of who appears with whom.
       Upload a book, check the detected names, and read the network.</p>
@@ -662,6 +670,6 @@ if result is not None and state["figure"] is not None:
         )
 
 st.caption(
-    "AILT9019 Group 65 · local processing · no text is sent to a remote service "
-    "· edge weights describe co-occurrence only"
+    "AILT9019 Group 65 · local processing · nothing is sent anywhere unless you enable "
+    "the AI cast list · edge weights describe co-occurrence only"
 )
