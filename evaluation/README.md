@@ -17,18 +17,19 @@ reproduces every number in [REPORT.md](REPORT.md).
 Matching is one-to-one and ignores honorifics, so a bare `Bennet` can be credited for
 `Mr Bennet` exactly once and never twice.
 
-## Two settings
+## Settings
 
 - **automatic** — the alias preset for the book plus the built-in rules. This is what a
   user gets after choosing a preset and pressing Generate.
 - **assisted** — the same run plus the *Additional names* list and the *Names to ignore*
   list from the reference file. This is what the fields in the *Names and aliases* tab
   are for.
+- **llm** — replaces those manual entries with a cast list proposed by DeepSeek. It needs
+  `DEEPSEEK_API_KEY` and network access, so it is not part of the default run.
 
-Comparing the two shows what the manual correction step changes: in *Jane Eyre* it moves
-two more main characters into the top five and removes the single false positive from the
-top ten. It does not change recall@10, because that limit comes from ranking order rather
-than from a missed name.
+Comparing the three shows what each correction step is worth: on *Jane Eyre*, the AI cast
+list moves recall@10 from 70% to 80% and edge coverage from 80% to 95%, because it adds
+characters that spaCy never tagged.
 
 ## Data
 
@@ -54,13 +55,14 @@ python evaluation/prepare_data.py
 ## Run it
 
 ```bash
-python evaluation/run_evaluation.py                 # both books, both settings
+python evaluation/run_evaluation.py                 # both books, automatic + assisted
 python evaluation/run_evaluation.py --book pride    # one book
 python evaluation/run_evaluation.py --export-examples
+DEEPSEEK_API_KEY=sk-… python evaluation/run_evaluation.py --with-llm   # adds the AI row
 ```
 
-The script writes `REPORT.md` and `results.json` next to itself and needs no network
-access once the model is installed.
+The default run writes `REPORT.md` and `results.json` next to itself and needs no network
+access once the model is installed. `--with-llm` adds the optional cast-list row.
 
 ## Current result (short version)
 
@@ -68,6 +70,8 @@ access once the model is installed.
 | --- | --- | --- | --- |
 | Pride and Prejudice | automatic | 80% | 100% |
 | Jane Eyre | automatic | 70% | 80% |
+| Pride and Prejudice | AI cast list | 90% | 100% |
+| Jane Eyre | AI cast list | 80% | 95% |
 | Both | failure cases | — | 6/6 refused |
 
 The proposal's target was about 70% recall for the top ten characters; both books meet

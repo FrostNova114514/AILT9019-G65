@@ -79,3 +79,23 @@ def test_example_book_button_loads_chapters_and_alias_preset():
     assert "Lizzy" in app.text_area[1].value  # alias preset loaded into the editor
     assert any("61 chapters detected" in str(caption.value) or "chapters detected" in str(caption.value)
                for caption in app.caption)
+
+
+def test_ai_cast_list_asks_for_a_key_before_calling_anything(monkeypatch):
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    app = _app()
+    next(button for button in app.button if button.label == "Load short sample").click().run()
+
+    toggle = next(item for item in app.toggle if "DeepSeek" in item.label)
+    assert toggle.value is False
+    toggle.set_value(True).run()
+    assert not app.exception
+
+    key_fields = [field for field in app.text_input if "API key" in (field.label or "")]
+    assert key_fields
+    assert key_fields[0].value == ""  # never prefilled from a missing environment variable
+
+    next(button for button in app.button if button.label == "Find characters with AI").click().run()
+    assert not app.exception
+    assert app.error
+    assert "API key" in app.error[0].value

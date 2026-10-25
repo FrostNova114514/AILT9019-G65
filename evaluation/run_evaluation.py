@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import platform
 import sys
 import time
@@ -35,14 +36,24 @@ RESULTS_PATH = EVALUATION_DIR / "results.json"
 
 sys.path.insert(0, str(DEMO_DIR))
 
-from character_network.analysis import InputValidationError, analyze_text  # noqa: E402
+from character_network.analysis import (  # noqa: E402
+    InputValidationError,
+    analyze_text,
+    detect_chapters,
+)
 from character_network.evaluation import evaluate_book  # noqa: E402
 from character_network.extraction import load_pipeline  # noqa: E402
-from character_network.graph import layout_graph  # noqa: E402
+from character_network.llm import (  # noqa: E402
+    DEFAULT_BASE_URL,
+    DEFAULT_MODEL,
+    apply_cast,
+    extract_cast,
+)
 from character_network.presets import get_preset  # noqa: E402
 from character_network.textproc import decode_upload, validate_text  # noqa: E402
 from character_network.visualization import (  # noqa: E402
     create_network_figure,
+    display_layout,
     figure_to_html,
     render_png,
 )
@@ -54,9 +65,12 @@ BOOKS = {
 
 #: "automatic" uses only the alias preset and the built-in rules. "assisted" adds the
 #: manual name list and the place ignore list that a reader can type into the app.
+#: "llm" replaces those manual entries with a cast list proposed by DeepSeek, which
+#: needs network access and an API key.
 SETTINGS = {
     "automatic": {"manual_names": [], "excluded_names": []},
     "assisted": {"manual_names": "manual_names", "excluded_names": "exclude_names"},
+    "llm": {"manual_names": "manual_names", "excluded_names": "exclude_names", "llm": True},
 }
 
 THEORY_TEXT = """
@@ -118,6 +132,27 @@ def _run_book(config: dict, nlp, setting: str, *, minimum_mentions: int = 2) -> 
     definition = SETTINGS[setting]
     manual = config.get(definition["manual_names"], []) if definition["manual_names"] else []
     excluded = config.get(definition["excluded_names"], []) if definition["excluded_names"] else []
+    cast_note = ""
+
+    if definition.get("llm"):
+        api_key = os.environ.get("DEEPSEEK_API_KEY", "")
+        if not api_key:
+            raise SystemExit(
+                "The 'llm' setting needs DEEPSEEK_API_KEY. Set it, or run without --with-llm."
+            )
+        cast = extract_cast(
+            text,
+            api_key=api_key,
+            model=os.environ.get("DEEPSEEK_MODEL", DEFAULT_MODEL),
+            base_url=os.environ.get("DEEPSEEK_BASE_URL", DEFAULT_BASE_URL),
+            chapters=detect_chapters(text),
+        )
+        aliases, manual, excluded = apply_cast(cast, aliases, manual, excluded)
+        cast_note = (
+            f"{len(cast.characters)} characters and {len(cast.aliases)} alias links proposed "
+            f"from {cast.excerpt_characters:,} characters of excerpts "
+            f"({cast.usage.get('total_tokens', '?')} tokens)"
+        )
 
     started = time.perf_counter()
     result = analyze_text(
@@ -141,6 +176,8 @@ def _run_book(config: dict, nlp, setting: str, *, minimum_mentions: int = 2) -> 
         config,
         elapsed_seconds=round(elapsed, 2),
     )
+    settings_used = dict(result.settings)
+    settings_used["llm_cast"] = cast_note
     return RunResult(
         book_key=config["text_file"].split(".")[0],
         title=config["title"],
@@ -150,7 +187,7 @@ def _run_book(config: dict, nlp, setting: str, *, minimum_mentions: int = 2) -> 
         edges=result.graph.number_of_edges(),
         chapters=len(result.chapters),
         elapsed=round(elapsed, 2),
-        settings_used=result.settings,
+        settings_used=settings_used,
         top_detected=evaluation.detected_ranked[:10],
     )
 
@@ -421,6 +458,31 @@ def _build_report(runs: list[RunResult], failures: list[FailureCase], output_not
     lines.append("")
     lines.append(output_note)
     lines.append("")
+    lines.append("## Optional AI cast list")
+    lines.append("")
+    llm_runs = [run for run in runs if run.setting == "llm"]
+    if llm_runs:
+        rows = [
+            [run.title, run.settings_used.get("llm_cast", ""), f"{run.metrics['recall_at_10']:.0%}", f"{run.metrics['edge_recall']:.0%}"]
+            for run in llm_runs
+        ]
+        lines.append(
+            _format_table(rows, ["Book", "What the model proposed", "Recall@10", "Edge coverage"])
+        )
+        lines.append("")
+        lines.append(
+            "The model only proposes names. Every name is matched against the local text, so a "
+            "hallucinated name produces no mentions and cannot enter the graph. The run needs "
+            "`DEEPSEEK_API_KEY` and network access, which is why it is not part of the default "
+            "reproduction command."
+        )
+    else:
+        lines.append(
+            "Not run. This setting calls DeepSeek with about 24,000 characters of excerpts; run "
+            "`python evaluation/run_evaluation.py --with-llm` with `DEEPSEEK_API_KEY` set to "
+            "include it."
+        )
+    lines.append("")
     lines.append("## Limitations observed in these runs")
     lines.append("")
     lines.append(
@@ -457,10 +519,20 @@ def main() -> int:
     parser.add_argument("--minimum-mentions", type=int, default=2)
     parser.add_argument("--no-report", action="store_true")
     parser.add_argument("--export-examples", action="store_true", help="Write HTML/PNG examples.")
+    parser.add_argument(
+        "--with-llm",
+        action="store_true",
+        help="Also run the DeepSeek cast-list setting (needs DEEPSEEK_API_KEY).",
+    )
     arguments = parser.parse_args()
 
     selected_books = list(BOOKS) if arguments.book == "all" else [arguments.book]
-    selected_settings = list(SETTINGS) if arguments.setting == "all" else [arguments.setting]
+    if arguments.setting == "all":
+        selected_settings = ["automatic", "assisted"]
+        if arguments.with_llm:
+            selected_settings.append("llm")
+    else:
+        selected_settings = [arguments.setting]
 
     print("Loading the spaCy model…")
     nlp = load_pipeline()
@@ -540,7 +612,7 @@ def _export_examples(runs: list[RunResult], nlp) -> str:
             minimum_mentions=2,
             maximum_characters=40,
         )
-        positions = layout_graph(result.graph)
+        positions = display_layout(result.graph)
         figure = create_network_figure(result.graph, positions=positions)
         html_path = examples_dir / f"{run.book_key}_network.html"
         html_path.write_text(figure_to_html(figure), encoding="utf-8")

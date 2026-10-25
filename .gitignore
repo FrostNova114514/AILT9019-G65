@@ -31,6 +31,11 @@ output/
 # Raw Gutenberg downloads; the cleaned novels in evaluation/data are committed
 evaluation/data/*_raw.txt
 
+# Local API keys for the optional AI cast list
+Demo/.streamlit/secrets.toml
+.streamlit/secrets.toml
+.env.local
+
 # Course reference materials not produced by the project team
 Course Overview_*.pdf
 student-guide_*.pdf

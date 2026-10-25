@@ -14,12 +14,15 @@ person.
 
 - Upload a `.txt` book, paste chapters, or load the bundled example.
 - Detect person names locally with spaCy (`en_core_web_sm`); no API key, no cloud.
+- Optionally ask DeepSeek for a **cast list only** (names, aliases, places to ignore) to
+  recover characters spaCy misses. Off by default; the model never sees the whole book,
+  and every proposed name is checked against the local text before it can appear.
 - Normalize names with an explicit alias table, honorific rules, and a conservative
   partial-name merge that only fires when exactly one longer name contains the short one.
 - Detect chapter headings and analyse the whole book or a chapter range.
 - Count co-occurrence by paragraph or by a sliding token window.
-- Draw an interactive NetworkX/Plotly graph: pan, zoom, hover for counts and one example
-  quotation per edge, colour by community or by weighted degree.
+- Draw an interactive NetworkX/Plotly graph with non-overlapping nodes: pan, zoom, hover
+  for counts and one example quotation per edge, colour by community or weighted degree.
 - Show a character-by-chapter heatmap for "when does this person appear".
 - Export standalone HTML, a 200 dpi PNG, CSV tables, and a JSON summary.
 - Refuse empty, binary, non-English, too-short, and character-free input with a message
@@ -43,6 +46,21 @@ fills in the alias table and the place ignore list, so the first graph is readab
 Full instructions, the CLI options, and a troubleshooting list are in
 [Demo/README.md](Demo/README.md).
 
+## Optional: recover characters with DeepSeek
+
+If a character is missing from the graph, the *Names and aliases* tab has an expander
+that asks DeepSeek for a cast list. Turn it on, paste a key (or set
+`DEEPSEEK_API_KEY`), press **Find characters with AI**, and the cast list, alias table,
+and place ignore list are filled in for you to review before generating.
+
+```powershell
+$env:DEEPSEEK_API_KEY = "sk-…"      # or paste it into the app's password field
+streamlit run app.py
+```
+
+The model is asked only for names; the local pipeline still does all the counting, so
+the result stays reproducible and every name can be traced back to the text.
+
 ## Example input and expected output
 
 [`examples/`](examples/README.md) holds one real input and the exact files the pipeline
@@ -63,14 +81,17 @@ characters and 20 expected relationship pairs:
 | *Pride and Prejudice* (61 chapters) | automatic | 80% | 100% | 1 of 40 |
 | *Jane Eyre* (37 chapters) | automatic | 70% | 80% | 5 of 40 |
 | *Pride and Prejudice* | + manual corrections | 80% | 100% | 1 of 40 |
-| *Jane Eyre* | + manual corrections | 70% | 80% | 5 of 40 |
+| *Jane Eyre* | + manual corrections | 70% | 80% | 6 of 40 |
+| *Pride and Prejudice* | + AI cast list | 90% | 100% | 1 of 40 |
+| *Jane Eyre* | + AI cast list | 80% | 95% | 7 of 40 |
 
 The proposal's target was about 70% recall for the top ten characters; both books pass
-without any manual name entry. Six failure cases (empty text, binary file, PDF, Chinese
-text, text that is too short, theory-style prose) are all refused with a specific
-message: 6/6.
+without any manual name entry, and the optional AI cast list lifts recall@10 by another
+10 points on both. Six failure cases (empty text, binary file, PDF, Chinese text, text
+that is too short, theory-style prose) are all refused with a specific message: 6/6.
 
-A full novel takes about 10–15 seconds to analyse on a laptop, model loading excluded.
+A full novel takes about 10–16 seconds to analyse on a laptop, model loading and the
+optional cast-list call excluded.
 
 ## How it works
 
@@ -114,7 +135,7 @@ AILT9019-G65/
 │   ├── cli.py                   headless runner (HTML/PNG/CSV/JSON)
 │   ├── character_network/       analysis package (see Demo/README.md for the module map)
 │   ├── sample_data/             sample story + Pride and Prejudice chapters I–III
-│   ├── tests/                   87 pytest tests, including Streamlit UI tests
+│   ├── tests/                   107 pytest tests, including Streamlit UI tests
 │   └── requirements.txt         pinned dependencies
 ├── evaluation/                  public-domain novels, reference lists, metrics, report
 ├── examples/                    example input → expected output artifacts
@@ -127,7 +148,7 @@ AILT9019-G65/
 
 ```bash
 cd Demo
-python -m pytest -q      # 87 passed
+python -m pytest -q      # 107 passed
 ```
 
 The suite covers decoding and validation, name normalization and merging, chapter
@@ -166,14 +187,25 @@ The tool does **not**:
 
 ## Privacy
 
-Everything runs in the local Python process. The text is not uploaded to a model API,
-not logged, and not written to disk unless you download a result file. The Streamlit
-server binds to `localhost`. The only network access happens during installation.
+By default everything runs in the local Python process: the text is not uploaded to a
+model API, not logged, and not written to disk unless you download a result file. The
+Streamlit server binds to `localhost`. The only network access happens during
+installation.
+
+The **AI cast list** is the one exception, and it is opt-in:
+
+- it sends about 24,000 characters of evenly spaced excerpts (roughly 7k tokens, well
+  under one US cent per book) to DeepSeek, never the full text;
+- the API key comes from `DEEPSEEK_API_KEY`, `Demo/.streamlit/secrets.toml`, or the
+  password field in the app, and is never written into the repository;
+- the response is used only as a list of name hypotheses. Each name is matched against
+  the local text, so a name the model invents simply produces no mentions;
+- leaving the toggle off keeps the run completely local.
 
 ## Project status
 
 Working prototype for the AILT9019 mid-term check: the end-to-end path (text in,
 interactive graph out) runs from a fresh clone, the evaluation is reproducible with one
-command, and 87 tests pass. Next steps, in order: better ranking of minor versus major
+command, and 107 tests pass. Next steps, in order: better ranking of minor versus major
 characters, an optional relation-type hint from a local language model, and a short
 walkthrough video following [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md).

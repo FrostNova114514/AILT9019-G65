@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -27,12 +28,19 @@ from character_network.analysis import (
     slice_to_chapters,
 )
 from character_network.extraction import ModelLoadError, load_pipeline
-from character_network.graph import layout_graph
+from character_network.llm import (
+    DEFAULT_BASE_URL,
+    DEFAULT_MODEL,
+    LLMError,
+    apply_cast,
+    extract_cast,
+)
 from character_network.names import aliases_to_json, parse_alias_table
 from character_network.presets import get_preset_raw
 from character_network.textproc import decode_upload
 from character_network.visualization import (
     create_network_figure,
+    display_layout,
     edge_table,
     figure_to_html,
     node_table,
@@ -99,6 +107,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--chapters", default=None, help="Chapter range such as '1-6'")
     parser.add_argument("--no-auto-merge", action="store_true", help="Disable automatic partial-name merges")
     parser.add_argument("--no-png", action="store_true", help="Skip the static PNG export")
+    parser.add_argument(
+        "--llm-cast",
+        action="store_true",
+        help="Ask DeepSeek for a cast list before analysing (needs network and an API key)",
+    )
+    parser.add_argument(
+        "--llm-key",
+        default=os.environ.get("DEEPSEEK_API_KEY", ""),
+        help="DeepSeek API key; defaults to DEEPSEEK_API_KEY",
+    )
+    parser.add_argument("--llm-model", default=os.environ.get("DEEPSEEK_MODEL", DEFAULT_MODEL))
+    parser.add_argument("--llm-url", default=os.environ.get("DEEPSEEK_BASE_URL", DEFAULT_BASE_URL))
     parser.add_argument("--quiet", action="store_true")
     arguments = parser.parse_args(argv)
 
@@ -120,14 +140,41 @@ def main(argv: list[str] | None = None) -> int:
 
     maximum = 0 if str(arguments.max_characters).casefold() == "all" else int(arguments.max_characters)
 
+    manual_names = _split(arguments.manual_names)
+    excluded_names = _split(arguments.exclude)
+
+    if arguments.llm_cast:
+        if not arguments.llm_key.strip():
+            print(
+                "error: --llm-cast needs an API key. Pass --llm-key or set DEEPSEEK_API_KEY.",
+                file=sys.stderr,
+            )
+            return 3
+        try:
+            cast = extract_cast(
+                text,
+                api_key=arguments.llm_key,
+                base_url=arguments.llm_url,
+                model=arguments.llm_model,
+                chapters=chapters,
+            )
+        except LLMError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 3
+        aliases, manual_names, excluded_names = apply_cast(
+            cast, aliases, manual_names, excluded_names
+        )
+        if not arguments.quiet:
+            print(f"AI cast: {cast.summary} ({cast.excerpt_characters:,} characters sent).")
+
     try:
         nlp = load_pipeline()
         result = analyze_text(
             text,
             nlp,
             aliases=aliases,
-            manual_names=_split(arguments.manual_names),
-            excluded_names=_split(arguments.exclude),
+            manual_names=manual_names,
+            excluded_names=excluded_names,
             mode=arguments.mode,
             window_size=arguments.window,
             minimum_edge_weight=arguments.min_weight,
@@ -140,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     arguments.outdir.mkdir(parents=True, exist_ok=True)
-    positions = layout_graph(result.graph)
+    positions = display_layout(result.graph)
     figure = create_network_figure(result.graph, positions=positions)
     (arguments.outdir / "network.html").write_text(figure_to_html(figure), encoding="utf-8")
     _write_csv(arguments.outdir / "characters.csv", node_table(result.graph).to_dict(orient="records"))

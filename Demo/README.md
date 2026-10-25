@@ -59,9 +59,45 @@ python cli.py --input sample_data/pride_and_prejudice_chapters_1_3.txt \
 | `--min-weight`, `--min-mentions`, `--max-characters` | Graph thresholds; `--max-characters all` keeps everyone |
 | `--manual-names`, `--exclude` | Comma-separated corrections |
 | `--no-auto-merge`, `--no-png` | Turn off the automatic partial-name merge or the PNG |
+| `--llm-cast` | Ask DeepSeek for a cast list first (needs `--llm-key` or `DEEPSEEK_API_KEY`) |
 
 Outputs: `network.html`, `network.png`, `characters.csv`, `relationships.csv`,
 `summary.json`, `aliases.json`.
+
+## Optional AI cast list
+
+spaCy's small model misses minor characters and sometimes tags a person as a place. The
+app can ask DeepSeek for a **cast list only** — canonical names, aliases, and places to
+ignore — and then run the normal local pipeline on it.
+
+```powershell
+$env:DEEPSEEK_API_KEY = "sk-…"     # PowerShell
+# export DEEPSEEK_API_KEY=sk-…     # bash
+streamlit run app.py
+```
+
+In the app: *Names and aliases* → expand **AI cast list** → **Find characters with AI**.
+The alias table, the additional-names field, and the ignore list are filled in, and you
+can edit them before pressing Generate.
+
+What leaves the machine: about 24,000 characters of evenly spaced excerpts (roughly 7k
+tokens, under one US cent) and nothing else. The key is read from `DEEPSEEK_API_KEY`,
+from `.streamlit/secrets.toml` (`DEEPSEEK_API_KEY = "sk-…"`, gitignored), or from the
+password field; it is never stored in the repository.
+
+Why the list is safe to trust: the model only proposes names. Every name is matched
+against the local text, so a name that is not in the book produces no mentions and
+cannot appear in the graph. Measured effect on the evaluation: recall@10 rises from 80%
+to 90% (*Pride and Prejudice*) and from 70% to 80% (*Jane Eyre*).
+
+From the command line:
+
+```bash
+python cli.py --input book.txt --preset "Pride and Prejudice" --llm-cast --outdir output
+```
+
+If the API is unreachable, the app shows the error and keeps the local result; remove
+`--llm-cast` to stay offline.
 
 ## Test
 
@@ -69,9 +105,10 @@ Outputs: `network.html`, `network.png`, `characters.csv`, `relationships.csv`,
 python -m pytest -q
 ```
 
-87 tests cover input decoding and validation, name normalization and merging,
-segmentation, graph construction, the plotting functions, the evaluation metrics, the
-CLI, and the Streamlit UI (through `streamlit.testing`).
+107 tests cover input decoding and validation, name normalization and merging,
+segmentation, graph construction, the non-overlapping layout, the plotting functions,
+the evaluation metrics, the optional cast-list parser, the CLI, and the Streamlit UI
+(through `streamlit.testing`).
 
 ## Module map
 
@@ -83,9 +120,10 @@ CLI, and the Streamlit UI (through `streamlit.testing`).
 | `character_network/names.py` | Normalization, alias table parsing, title rules, conservative merges |
 | `character_network/extraction.py` | spaCy PERSON detection, honorific re-attachment, filters |
 | `character_network/graph.py` | Co-occurrence counting, graph construction, metrics, layout |
-| `character_network/visualization.py` | Plotly figure, matplotlib PNG, chapter heatmap, tables |
+| `character_network/visualization.py` | Canvas layout without overlaps, Plotly figure, matplotlib PNG, chapter heatmap, tables |
 | `character_network/analysis.py` | Pipeline orchestration, `analyze_text`, `AnalysisResult` |
 | `character_network/evaluation.py` | Recall@k, edge coverage, name matching |
+| `character_network/llm.py` | Optional DeepSeek cast list (excerpt sampling, JSON parsing, merge rules) |
 | `character_network/presets.py` | Alias tables for the two test novels |
 
 ## Troubleshooting
@@ -102,7 +140,13 @@ and run `python -m streamlit run app.py`.
 **The graph is unreadable**
 Raise *Minimum co-occurrence count*, raise *Minimum mentions per character*, or lower
 *Characters shown*. `--max-characters all` draws everyone, which is rarely readable for a
-whole novel.
+whole novel. Node circles never overlap: the layout reserves space for each marker and
+pushes neighbours apart, and labels move to the side that stays clear.
+
+**The AI cast list fails**
+`The API key was rejected` means the key is wrong or revoked — generate a new one.
+`Could not reach the API` means no network; turn the toggle off, the local pipeline does
+not need it. Rate limits reset after a moment.
 
 **Two characters share one node**
 Honorifics are stripped before counting, so a bare surname (`Bennet`, `Reed`) can absorb

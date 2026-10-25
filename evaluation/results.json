@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24",
+  "generated": "2026-10-25",
   "python": "3.13.5",
   "versions": {
     "spacy": "3.8.16",
@@ -17,7 +17,7 @@
       "nodes": 40,
       "edges": 371,
       "chapters": 61,
-      "elapsed_seconds": 9.22,
+      "elapsed_seconds": 10.78,
       "top_detected": [
         "Elizabeth Bennet",
         "Fitzwilliam Darcy",
@@ -205,7 +205,7 @@
       "nodes": 40,
       "edges": 339,
       "chapters": 61,
-      "elapsed_seconds": 9.09,
+      "elapsed_seconds": 9.69,
       "top_detected": [
         "Elizabeth Bennet",
         "Fitzwilliam Darcy",
@@ -387,13 +387,201 @@
       "missed_edges": []
     },
     {
+      "book": "pride_and_prejudice",
+      "title": "Pride and Prejudice",
+      "setting": "llm",
+      "nodes": 40,
+      "edges": 385,
+      "chapters": 61,
+      "elapsed_seconds": 11.13,
+      "top_detected": [
+        "Elizabeth Bennet",
+        "Fitzwilliam Darcy",
+        "Jane Bennet",
+        "Charles Bingley",
+        "George Wickham",
+        "Lydia Bennet",
+        "William Collins",
+        "Mrs Bennet",
+        "Charlotte Lucas",
+        "Lady Catherine de Bourgh"
+      ],
+      "detected_top_10": [
+        "Elizabeth Bennet",
+        "Fitzwilliam Darcy",
+        "Jane Bennet",
+        "Charles Bingley",
+        "George Wickham",
+        "Lydia Bennet",
+        "William Collins",
+        "Mrs Bennet",
+        "Charlotte Lucas",
+        "Lady Catherine de Bourgh"
+      ],
+      "reference_characters": [
+        "Elizabeth Bennet",
+        "Fitzwilliam Darcy",
+        "Jane Bennet",
+        "Charles Bingley",
+        "Mr Bennet",
+        "Mrs Bennet",
+        "George Wickham",
+        "William Collins",
+        "Charlotte Lucas",
+        "Lydia Bennet",
+        "Caroline Bingley",
+        "Lady Catherine de Bourgh",
+        "Kitty Bennet",
+        "Mary Bennet",
+        "Georgiana Darcy",
+        "Colonel Fitzwilliam",
+        "Mr Gardiner",
+        "Mrs Gardiner",
+        "Anne de Bourgh",
+        "Mrs Hurst"
+      ],
+      "precision_at_10": 1.0,
+      "recall_at_5": 0.8,
+      "recall_at_10": 0.9,
+      "recall_at_20": 0.9,
+      "character_recall": 0.95,
+      "edge_recall": 1.0,
+      "protagonist": "Elizabeth Bennet",
+      "protagonist_detected": "Elizabeth Bennet",
+      "protagonist_rank_by_weighted_degree": 1,
+      "unexpected_top_10": [],
+      "matched_edges": [
+        [
+          "Elizabeth Bennet",
+          "Fitzwilliam Darcy",
+          "Elizabeth Bennet",
+          "Fitzwilliam Darcy"
+        ],
+        [
+          "Elizabeth Bennet",
+          "Jane Bennet",
+          "Elizabeth Bennet",
+          "Jane Bennet"
+        ],
+        [
+          "Jane Bennet",
+          "Charles Bingley",
+          "Jane Bennet",
+          "Charles Bingley"
+        ],
+        [
+          "Elizabeth Bennet",
+          "Charlotte Lucas",
+          "Elizabeth Bennet",
+          "Charlotte Lucas"
+        ],
+        [
+          "Elizabeth Bennet",
+          "George Wickham",
+          "Elizabeth Bennet",
+          "George Wickham"
+        ],
+        [
+          "Elizabeth Bennet",
+          "William Collins",
+          "Elizabeth Bennet",
+          "William Collins"
+        ],
+        [
+          "Elizabeth Bennet",
+          "Lady Catherine de Bourgh",
+          "Elizabeth Bennet",
+          "Lady Catherine de Bourgh"
+        ],
+        [
+          "Fitzwilliam Darcy",
+          "Charles Bingley",
+          "Fitzwilliam Darcy",
+          "Charles Bingley"
+        ],
+        [
+          "Fitzwilliam Darcy",
+          "Georgiana Darcy",
+          "Fitzwilliam Darcy",
+          "Georgiana Darcy"
+        ],
+        [
+          "Fitzwilliam Darcy",
+          "George Wickham",
+          "Fitzwilliam Darcy",
+          "George Wickham"
+        ],
+        [
+          "Mr Bennet",
+          "Mrs Bennet",
+          "Mrs Bennet",
+          "Mr Bennet"
+        ],
+        [
+          "Lydia Bennet",
+          "George Wickham",
+          "Lydia Bennet",
+          "George Wickham"
+        ],
+        [
+          "Caroline Bingley",
+          "Fitzwilliam Darcy",
+          "Caroline Bingley",
+          "Fitzwilliam Darcy"
+        ],
+        [
+          "Elizabeth Bennet",
+          "Mrs Bennet",
+          "Elizabeth Bennet",
+          "Mr Bennet"
+        ],
+        [
+          "Jane Bennet",
+          "Mrs Bennet",
+          "Jane Bennet",
+          "Mr Bennet"
+        ],
+        [
+          "Kitty Bennet",
+          "Lydia Bennet",
+          "Kitty Bennet",
+          "Lydia Bennet"
+        ],
+        [
+          "William Collins",
+          "Charlotte Lucas",
+          "William Collins",
+          "Charlotte Lucas"
+        ],
+        [
+          "Charles Bingley",
+          "Caroline Bingley",
+          "Charles Bingley",
+          "Caroline Bingley"
+        ],
+        [
+          "Elizabeth Bennet",
+          "Kitty Bennet",
+          "Elizabeth Bennet",
+          "Kitty Bennet"
+        ],
+        [
+          "Mary Bennet",
+          "Mr Bennet",
+          "Mary Bennet",
+          "Mrs Bennet"
+        ]
+      ],
+      "missed_edges": []
+    },
+    {
       "book": "jane_eyre",
       "title": "Jane Eyre",
       "setting": "automatic",
       "nodes": 40,
       "edges": 155,
       "chapters": 37,
-      "elapsed_seconds": 13.81,
+      "elapsed_seconds": 15.89,
       "top_detected": [
         "Edward Rochester",
         "Jane Eyre",
@@ -576,7 +764,7 @@
       "nodes": 40,
       "edges": 157,
       "chapters": 37,
-      "elapsed_seconds": 14.13,
+      "elapsed_seconds": 15.08,
       "top_detected": [
         "Edward Rochester",
         "Jane Eyre",
@@ -747,6 +935,193 @@
         [
           "Jane Eyre",
           "Georgiana Reed"
+        ]
+      ]
+    },
+    {
+      "book": "jane_eyre",
+      "title": "Jane Eyre",
+      "setting": "llm",
+      "nodes": 40,
+      "edges": 190,
+      "chapters": 37,
+      "elapsed_seconds": 15.78,
+      "top_detected": [
+        "Edward Rochester",
+        "Jane Eyre",
+        "Bessie",
+        "Adèle Varens",
+        "Mrs Fairfax",
+        "St John Rivers",
+        "Blanche Ingram",
+        "Mary Rivers",
+        "Diana Rivers",
+        "Mrs Reed"
+      ],
+      "detected_top_10": [
+        "Edward Rochester",
+        "Jane Eyre",
+        "Bessie",
+        "Adèle Varens",
+        "Mrs Fairfax",
+        "St John Rivers",
+        "Blanche Ingram",
+        "Mary Rivers",
+        "Diana Rivers",
+        "Mrs Reed"
+      ],
+      "reference_characters": [
+        "Jane Eyre",
+        "Edward Rochester",
+        "St John Rivers",
+        "Mrs Reed",
+        "Helen Burns",
+        "Bessie",
+        "Mrs Fairfax",
+        "Adèle Varens",
+        "Blanche Ingram",
+        "Mr Brocklehurst",
+        "Diana Rivers",
+        "Mary Rivers",
+        "Bertha Mason",
+        "Grace Poole",
+        "Miss Temple",
+        "John Reed",
+        "Eliza Reed",
+        "Georgiana Reed",
+        "Richard Mason",
+        "Céline Varens"
+      ],
+      "precision_at_10": 1.0,
+      "recall_at_5": 0.4,
+      "recall_at_10": 0.8,
+      "recall_at_20": 0.85,
+      "character_recall": 1.0,
+      "edge_recall": 0.95,
+      "protagonist": "Jane Eyre",
+      "protagonist_detected": "Jane Eyre",
+      "protagonist_rank_by_weighted_degree": 7,
+      "unexpected_top_10": [],
+      "matched_edges": [
+        [
+          "Jane Eyre",
+          "Edward Rochester",
+          "Jane Eyre",
+          "Edward Rochester"
+        ],
+        [
+          "Jane Eyre",
+          "Helen Burns",
+          "Jane Eyre",
+          "Helen Burns"
+        ],
+        [
+          "Jane Eyre",
+          "Mrs Reed",
+          "Jane Eyre",
+          "Mrs Reed"
+        ],
+        [
+          "Jane Eyre",
+          "Mr Brocklehurst",
+          "Jane Eyre",
+          "Mr Brocklehurst"
+        ],
+        [
+          "Jane Eyre",
+          "St John Rivers",
+          "Jane Eyre",
+          "St John Rivers"
+        ],
+        [
+          "Jane Eyre",
+          "Diana Rivers",
+          "Jane Eyre",
+          "Diana Rivers"
+        ],
+        [
+          "Jane Eyre",
+          "Mary Rivers",
+          "Jane Eyre",
+          "Mary Rivers"
+        ],
+        [
+          "Jane Eyre",
+          "Mrs Fairfax",
+          "Jane Eyre",
+          "Mrs Fairfax"
+        ],
+        [
+          "Jane Eyre",
+          "Adèle Varens",
+          "Jane Eyre",
+          "Adèle Varens"
+        ],
+        [
+          "Jane Eyre",
+          "Bessie",
+          "Jane Eyre",
+          "Bessie"
+        ],
+        [
+          "Edward Rochester",
+          "Blanche Ingram",
+          "Edward Rochester",
+          "Blanche Ingram"
+        ],
+        [
+          "Edward Rochester",
+          "Adèle Varens",
+          "Edward Rochester",
+          "Adèle Varens"
+        ],
+        [
+          "Jane Eyre",
+          "Richard Mason",
+          "Jane Eyre",
+          "Richard Mason"
+        ],
+        [
+          "Jane Eyre",
+          "John Reed",
+          "Jane Eyre",
+          "John Reed"
+        ],
+        [
+          "Jane Eyre",
+          "Eliza Reed",
+          "Jane Eyre",
+          "Eliza Reed"
+        ],
+        [
+          "Jane Eyre",
+          "Georgiana Reed",
+          "Jane Eyre",
+          "Georgiana Reed"
+        ],
+        [
+          "St John Rivers",
+          "Diana Rivers",
+          "St John Rivers",
+          "Diana Rivers"
+        ],
+        [
+          "St John Rivers",
+          "Mary Rivers",
+          "St John Rivers",
+          "Mary Rivers"
+        ],
+        [
+          "Helen Burns",
+          "Miss Temple",
+          "Helen Burns",
+          "Miss Temple"
+        ]
+      ],
+      "missed_edges": [
+        [
+          "Edward Rochester",
+          "Bertha Mason"
         ]
       ]
     }

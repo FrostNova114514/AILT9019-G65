@@ -44,8 +44,17 @@ From the full-book evaluation: *Pride and Prejudice* recall@10 80%, edge coverag
 
 - Empty graph → raise *Minimum mentions per character* back to 2 and re-generate; the
   ignore list may have removed a real character.
+- A main character is missing → open **AI cast list**, press **Find characters with AI**
+  (with `DEEPSEEK_API_KEY` set), review the filled fields, and generate again. Without a
+  network, skip this: the local pipeline still works.
 - Model error → the banner says to run `python -m spacy download en_core_web_sm`.
 - Anything else → stop, restart `streamlit run app.py`, and record again from 0:00.
+
+## Optional extra shot (5 s, if there is room)
+
+Open *Names and aliases*, point at the **AI cast list** expander and say: "If a character
+is missing, the model proposes a cast list, and every name is still verified against the
+text." Never show the API key on screen.
 
 ## Cheat line
 

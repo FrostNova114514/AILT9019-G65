@@ -29,6 +29,7 @@ from .textproc import Chapter, decode_upload, detect_language, validate_text
 from .visualization import (
     chapter_heatmap,
     create_network_figure,
+    display_layout,
     edge_table,
     figure_to_html,
     node_table,
@@ -53,6 +54,7 @@ __all__ = [
     "decode_upload",
     "detect_chapters",
     "detect_language",
+    "display_layout",
     "edge_table",
     "figure_to_html",
     "get_preset",

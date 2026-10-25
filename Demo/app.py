@@ -4,13 +4,16 @@ Run with::
 
     streamlit run app.py
 
-Everything runs locally: the text, the spaCy model, NetworkX, and the plots never
-leave the machine.
+Everything runs locally by default: the text, the spaCy model, NetworkX, and the plots
+stay on this machine. The optional AI cast list is the single exception, and it is off
+unless the user turns it on; it sends a bounded excerpt to DeepSeek, never the whole
+book, and the resulting names are verified against the local text.
 """
 
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -24,13 +27,22 @@ from character_network.analysis import (
     slice_to_chapters,
 )
 from character_network.extraction import ModelLoadError, load_pipeline
-from character_network.graph import chapter_presence, layout_graph
+from character_network.graph import chapter_presence
+from character_network.llm import (
+    DEFAULT_BASE_URL,
+    DEFAULT_MODEL,
+    LLMError,
+    api_key_from_env,
+    apply_cast,
+    extract_cast,
+)
 from character_network.names import aliases_to_json, parse_alias_table
 from character_network.presets import get_preset_raw, preset_labels
 from character_network.textproc import decode_upload
 from character_network.visualization import (
     chapter_heatmap,
     create_network_figure,
+    display_layout,
     edge_table,
     figure_to_html,
     merge_table,
@@ -269,6 +281,77 @@ with input_tab:
         chapter_range = (1, 1)
 
 with names_tab:
+    with st.expander("AI cast list (optional) — recover characters that spaCy misses"):
+        st.markdown(
+            "The local model misses minor characters and sometimes tags a person as a place. "
+            "This option asks DeepSeek for a **cast list only** (names, aliases, and places to "
+            "ignore). Counting, merging, thresholds, and drawing stay local and deterministic."
+        )
+        ai_enabled = st.toggle(
+            "Use DeepSeek to propose characters, aliases, and place names",
+            value=bool(api_key_from_env()),
+            key="ai_enabled",
+        )
+        if ai_enabled:
+            api_key = st.text_input(
+                "DeepSeek API key",
+                value=api_key_from_env(),
+                type="password",
+                key="ai_key",
+                help=(
+                    "Reads DEEPSEEK_API_KEY when set. The key stays in this browser session and "
+                    "is never written to the repository."
+                ),
+            )
+            st.caption(
+                "Sends about 24,000 characters of evenly spaced excerpts (roughly 7k tokens, "
+                "well under one US cent) to DeepSeek. The full book is never uploaded, and every "
+                "returned name is checked against the local text before it reaches the graph."
+            )
+            if st.button("Find characters with AI", width="stretch", key="ai_run"):
+                if not current_text.strip():
+                    st.error("Add a book first: the AI needs excerpts to read.")
+                elif not api_key.strip():
+                    st.error(
+                        "Paste a DeepSeek API key, or set DEEPSEEK_API_KEY before starting the app."
+                    )
+                else:
+                    try:
+                        with st.spinner("Asking DeepSeek for the cast list…"):
+                            cast = extract_cast(
+                                current_text,
+                                api_key=api_key,
+                                base_url=os.environ.get("DEEPSEEK_BASE_URL", DEFAULT_BASE_URL),
+                                model=os.environ.get("DEEPSEEK_MODEL", DEFAULT_MODEL),
+                                chapters=detect_chapters(current_text),
+                            )
+                        base_aliases = parse_alias_table(
+                            st.session_state.get("alias_text", "{}")
+                        )
+                        merged, manual, excluded = apply_cast(
+                            cast,
+                            base_aliases,
+                            _split_names(st.session_state.get("manual_names_input", "")),
+                            _split_names(st.session_state.get("excluded_names_input", "")),
+                        )
+                        st.session_state["alias_text"] = aliases_to_json(merged)
+                        st.session_state["manual_names_input"] = ", ".join(manual)
+                        st.session_state["excluded_names_input"] = ", ".join(excluded)
+                        st.session_state["ai_summary"] = (
+                            f"Added {len(cast.characters)} characters, {len(cast.aliases)} alias "
+                            f"links and {len(cast.places)} place names from {cast.model} "
+                            f"({cast.excerpt_characters:,} characters sent)."
+                        )
+                        st.rerun()
+                    except (LLMError, ValueError) as exc:
+                        st.error(str(exc))
+        if st.session_state.get("ai_summary"):
+            st.success(st.session_state["ai_summary"])
+            st.caption(
+                "The fields below show the merged result. Review them, then press "
+                "**Generate relationship network**."
+            )
+
     left, right = st.columns(2, gap="large")
     with left:
         st.subheader("Alias table")
@@ -411,7 +494,7 @@ if generate:
                 maximum_characters=maximum_characters,
                 auto_merge=auto_merge,
             )
-            positions = layout_graph(result.graph)
+            positions = display_layout(result.graph)
             figure = create_network_figure(
                 result.graph,
                 positions=positions,
