@@ -32,6 +32,7 @@ from character_network.llm import (
     DEFAULT_BASE_URL,
     DEFAULT_MODEL,
     LLMError,
+    api_key_from_env,
     apply_cast,
     extract_cast,
 )
@@ -114,8 +115,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--llm-key",
-        default=os.environ.get("DEEPSEEK_API_KEY", ""),
-        help="DeepSeek API key; defaults to DEEPSEEK_API_KEY",
+        default=api_key_from_env(),
+        help="DeepSeek API key; defaults to DEEPSEEK_API_KEY, Demo/.streamlit/secrets.toml, or Demo/.env",
     )
     parser.add_argument("--llm-model", default=os.environ.get("DEEPSEEK_MODEL", DEFAULT_MODEL))
     parser.add_argument("--llm-url", default=os.environ.get("DEEPSEEK_BASE_URL", DEFAULT_BASE_URL))

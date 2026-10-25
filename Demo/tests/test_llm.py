@@ -80,6 +80,27 @@ def test_extract_cast_requires_a_key():
         extract_cast("text", api_key="")
 
 
+def test_api_key_falls_back_to_a_file(tmp_path, monkeypatch):
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    secrets = tmp_path / "secrets.toml"
+    secrets.write_text(
+        '# local key\nDEEPSEEK_API_KEY = "file-key"\n', encoding="utf-8"
+    )
+    assert llm.api_key_from_env([secrets]) == "file-key"
+
+    secrets.write_text("DEEPSEEK_API_KEY=plain-key\n", encoding="utf-8")
+    assert llm.api_key_from_env([secrets]) == "plain-key"
+
+    assert llm.api_key_from_env([tmp_path / "missing.toml"]) == ""
+
+
+def test_environment_variable_wins_over_the_file(tmp_path, monkeypatch):
+    secrets = tmp_path / "secrets.toml"
+    secrets.write_text('DEEPSEEK_API_KEY = "file-key"\n', encoding="utf-8")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "env-key")
+    assert llm.api_key_from_env([secrets]) == "env-key"
+
+
 def test_extract_cast_rejects_unparseable_answer(monkeypatch):
     monkeypatch.setattr(llm, "_post_json", lambda *args, **kwargs: _response("I cannot help."))
     with pytest.raises(LLMError, match="JSON object"):

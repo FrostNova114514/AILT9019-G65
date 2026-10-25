@@ -58,11 +58,12 @@ python evaluation/prepare_data.py
 python evaluation/run_evaluation.py                 # both books, automatic + assisted
 python evaluation/run_evaluation.py --book pride    # one book
 python evaluation/run_evaluation.py --export-examples
-DEEPSEEK_API_KEY=sk-… python evaluation/run_evaluation.py --with-llm   # adds the AI row
+python evaluation/run_evaluation.py --with-llm      # adds the AI row
 ```
 
 The default run writes `REPORT.md` and `results.json` next to itself and needs no network
-access once the model is installed. `--with-llm` adds the optional cast-list row.
+access once the model is installed. `--with-llm` adds the optional cast-list row and reads
+the key from `DEEPSEEK_API_KEY` or `Demo/.streamlit/secrets.toml`.
 
 ## Current result (short version)
 

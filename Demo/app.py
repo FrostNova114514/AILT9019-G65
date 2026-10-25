@@ -35,6 +35,7 @@ from character_network.llm import (
     api_key_from_env,
     apply_cast,
     extract_cast,
+    key_source,
 )
 from character_network.names import aliases_to_json, parse_alias_table
 from character_network.presets import get_preset_raw, preset_labels
@@ -299,10 +300,13 @@ with names_tab:
                 type="password",
                 key="ai_key",
                 help=(
-                    "Reads DEEPSEEK_API_KEY when set. The key stays in this browser session and "
-                    "is never written to the repository."
+                    "Reads DEEPSEEK_API_KEY, Demo/.streamlit/secrets.toml, or Demo/.env when set. "
+                    "The key stays in this browser session and is never written to the repository."
                 ),
             )
+            source = key_source()
+            if source:
+                st.caption(f"Using the key from `{source}`.")
             st.caption(
                 "Sends about 24,000 characters of evenly spaced excerpts (roughly 7k tokens, "
                 "well under one US cent) to DeepSeek. The full book is never uploaded, and every "

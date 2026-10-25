@@ -46,6 +46,7 @@ from character_network.extraction import load_pipeline  # noqa: E402
 from character_network.llm import (  # noqa: E402
     DEFAULT_BASE_URL,
     DEFAULT_MODEL,
+    api_key_from_env,
     apply_cast,
     extract_cast,
 )
@@ -135,7 +136,7 @@ def _run_book(config: dict, nlp, setting: str, *, minimum_mentions: int = 2) -> 
     cast_note = ""
 
     if definition.get("llm"):
-        api_key = os.environ.get("DEEPSEEK_API_KEY", "")
+        api_key = api_key_from_env()
         if not api_key:
             raise SystemExit(
                 "The 'llm' setting needs DEEPSEEK_API_KEY. Set it, or run without --with-llm."

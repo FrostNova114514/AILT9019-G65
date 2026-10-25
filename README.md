@@ -49,14 +49,19 @@ Full instructions, the CLI options, and a troubleshooting list are in
 ## Optional: recover characters with DeepSeek
 
 If a character is missing from the graph, the *Names and aliases* tab has an expander
-that asks DeepSeek for a cast list. Turn it on, paste a key (or set
-`DEEPSEEK_API_KEY`), press **Find characters with AI**, and the cast list, alias table,
-and place ignore list are filled in for you to review before generating.
+that asks DeepSeek for a cast list. Turn it on, press **Find characters with AI**, and the
+cast list, alias table, and place ignore list are filled in for you to review before
+generating.
 
-```powershell
-$env:DEEPSEEK_API_KEY = "sk-…"      # or paste it into the app's password field
-streamlit run app.py
+The key lives in one gitignored file, so no command contains it:
+
+```toml
+# Demo/.streamlit/secrets.toml  — copy from secrets.example.toml
+DEEPSEEK_API_KEY = "sk-…"
 ```
+
+The `DEEPSEEK_API_KEY` environment variable overrides the file, and pasting a key into
+the app's password field works for a single session.
 
 The model is asked only for names; the local pipeline still does all the counting, so
 the result stays reproducible and every name can be traced back to the text.
@@ -196,8 +201,9 @@ The **AI cast list** is the one exception, and it is opt-in:
 
 - it sends about 24,000 characters of evenly spaced excerpts (roughly 7k tokens, well
   under one US cent per book) to DeepSeek, never the full text;
-- the API key comes from `DEEPSEEK_API_KEY`, `Demo/.streamlit/secrets.toml`, or the
-  password field in the app, and is never written into the repository;
+- the API key lives in `Demo/.streamlit/secrets.toml` (gitignored), in
+  `DEEPSEEK_API_KEY`, or in the app's password field for one session, and is never
+  written into the repository;
 - the response is used only as a list of name hypotheses. Each name is matched against
   the local text, so a name the model invents simply produces no mentions;
 - leaving the toggle off keeps the run completely local.

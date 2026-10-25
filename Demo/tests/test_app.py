@@ -2,6 +2,8 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
+from character_network import llm
+
 APP_PATH = Path(__file__).resolve().parents[1] / "app.py"
 
 
@@ -82,7 +84,9 @@ def test_example_book_button_loads_chapters_and_alias_preset():
 
 
 def test_ai_cast_list_asks_for_a_key_before_calling_anything(monkeypatch):
+    # Hide any real key configured on this machine so the test is deterministic.
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    monkeypatch.setattr(llm, "KEY_FILES", ())
     app = _app()
     next(button for button in app.button if button.label == "Load short sample").click().run()
 

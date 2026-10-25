@@ -70,10 +70,21 @@ spaCy's small model misses minor characters and sometimes tags a person as a pla
 app can ask DeepSeek for a **cast list only** — canonical names, aliases, and places to
 ignore — and then run the normal local pipeline on it.
 
-```powershell
-$env:DEEPSEEK_API_KEY = "sk-…"     # PowerShell
-# export DEEPSEEK_API_KEY=sk-…     # bash
+**Set the key once, in a file.** Copy `Demo/.streamlit/secrets.example.toml` to
+`Demo/.streamlit/secrets.toml` and fill in your key:
+
+```toml
+DEEPSEEK_API_KEY = "sk-…"
+```
+
+That file is gitignored, and both the app and `cli.py` read it automatically, so no
+command ever contains the key. Two alternatives work too: the `DEEPSEEK_API_KEY`
+environment variable (takes priority), or pasting the key into the app's password field
+for one session.
+
+```bash
 streamlit run app.py
+python cli.py --input book.txt --preset "Pride and Prejudice" --llm-cast --outdir output
 ```
 
 In the app: *Names and aliases* → expand **AI cast list** → **Find characters with AI**.
@@ -81,20 +92,12 @@ The alias table, the additional-names field, and the ignore list are filled in, 
 can edit them before pressing Generate.
 
 What leaves the machine: about 24,000 characters of evenly spaced excerpts (roughly 7k
-tokens, under one US cent) and nothing else. The key is read from `DEEPSEEK_API_KEY`,
-from `.streamlit/secrets.toml` (`DEEPSEEK_API_KEY = "sk-…"`, gitignored), or from the
-password field; it is never stored in the repository.
+tokens, under one US cent) and nothing else.
 
 Why the list is safe to trust: the model only proposes names. Every name is matched
 against the local text, so a name that is not in the book produces no mentions and
 cannot appear in the graph. Measured effect on the evaluation: recall@10 rises from 80%
 to 90% (*Pride and Prejudice*) and from 70% to 80% (*Jane Eyre*).
-
-From the command line:
-
-```bash
-python cli.py --input book.txt --preset "Pride and Prejudice" --llm-cast --outdir output
-```
 
 If the API is unreachable, the app shows the error and keeps the local result; remove
 `--llm-cast` to stay offline.

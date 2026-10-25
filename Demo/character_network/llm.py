@@ -18,6 +18,7 @@ import os
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 from .names import canonical_key, name_tokens, normalize_surface
@@ -28,6 +29,14 @@ DEFAULT_MODEL = "deepseek-chat"
 DEFAULT_TIMEOUT = 120
 DEFAULT_MAX_EXCERPT = 24_000
 DEFAULT_MAX_CHARACTERS = 60
+
+#: Files checked when ``DEEPSEEK_API_KEY`` is not in the environment. They live beside
+#: ``app.py`` and are gitignored, so a key can be configured once without retyping it in
+#: every command.
+KEY_FILES = (
+    Path(__file__).resolve().parents[1] / ".streamlit" / "secrets.toml",
+    Path(__file__).resolve().parents[1] / ".env",
+)
 
 SYSTEM_PROMPT = (
     "You build character lists for a reading aid that maps which people appear near "
@@ -86,10 +95,51 @@ class CastResult:
         )
 
 
-def api_key_from_env() -> str:
-    """Return the key configured for this process, or ``""``."""
+def _read_key_file(path: Path, name: str = "DEEPSEEK_API_KEY") -> str:
+    """Return a ``KEY = value`` entry from a TOML or dotenv style file."""
 
-    return os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    try:
+        text = path.read_text(encoding="utf-8-sig")
+    except OSError:
+        return ""
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or line.startswith("["):
+            continue
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        if key.strip().strip("'\"") != name:
+            continue
+        return value.strip().strip("'\"").strip()
+    return ""
+
+
+def api_key_from_env(paths: Sequence[Path] | None = None) -> str:
+    """Return the configured key: environment first, then ``secrets.toml``, then ``.env``."""
+
+    key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    if key:
+        return key
+    for path in paths if paths is not None else KEY_FILES:
+        key = _read_key_file(path)
+        if key:
+            return key
+    return ""
+
+
+def key_source() -> str:
+    """Describe where the key came from, for the interface caption."""
+
+    if os.environ.get("DEEPSEEK_API_KEY", "").strip():
+        return "DEEPSEEK_API_KEY environment variable"
+    for path in KEY_FILES:
+        if _read_key_file(path):
+            try:
+                return str(path.relative_to(path.parents[1]))
+            except (ValueError, IndexError):  # pragma: no cover
+                return str(path)
+    return ""
 
 
 def build_excerpt(
