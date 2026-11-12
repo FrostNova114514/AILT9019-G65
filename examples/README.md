@@ -39,7 +39,7 @@ relationship network** (the example button fills in the alias table and the igno
 Printed summary for this input:
 
 ```text
-Characters: 13   Relationships: 34   Mentions: 101   Units: 85
+Characters: 13   Relationships: 34   Mentions: 93   Units: 85
 Analysed in 0.4 s
 
   #  character                        mentions  weighted degree

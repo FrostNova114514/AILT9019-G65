@@ -1,13 +1,13 @@
 {
-  "generated": "2026-10-25",
-  "python": "3.13.5",
+  "generated": "2026-11-12",
+  "python": "3.13.7",
   "versions": {
-    "spacy": "3.8.16",
+    "spacy": "3.8.18",
     "en-core-web-sm": "3.8.0",
     "networkx": "3.7",
     "plotly": "6.9.0",
-    "streamlit": "1.66.1",
-    "pandas": "3.1.0"
+    "streamlit": "1.67.0",
+    "pandas": "3.1.1"
   },
   "runs": [
     {
@@ -17,7 +17,7 @@
       "nodes": 40,
       "edges": 371,
       "chapters": 61,
-      "elapsed_seconds": 10.78,
+      "elapsed_seconds": 11.65,
       "top_detected": [
         "Elizabeth Bennet",
         "Fitzwilliam Darcy",
@@ -205,7 +205,7 @@
       "nodes": 40,
       "edges": 339,
       "chapters": 61,
-      "elapsed_seconds": 9.69,
+      "elapsed_seconds": 11.04,
       "top_detected": [
         "Elizabeth Bennet",
         "Fitzwilliam Darcy",
@@ -391,9 +391,9 @@
       "title": "Pride and Prejudice",
       "setting": "llm",
       "nodes": 40,
-      "edges": 385,
+      "edges": 358,
       "chapters": 61,
-      "elapsed_seconds": 11.13,
+      "elapsed_seconds": 12.14,
       "top_detected": [
         "Elizabeth Bennet",
         "Fitzwilliam Darcy",
@@ -581,7 +581,7 @@
       "nodes": 40,
       "edges": 155,
       "chapters": 37,
-      "elapsed_seconds": 15.89,
+      "elapsed_seconds": 17.29,
       "top_detected": [
         "Edward Rochester",
         "Jane Eyre",
@@ -764,7 +764,7 @@
       "nodes": 40,
       "edges": 157,
       "chapters": 37,
-      "elapsed_seconds": 15.08,
+      "elapsed_seconds": 16.69,
       "top_detected": [
         "Edward Rochester",
         "Jane Eyre",
@@ -943,9 +943,9 @@
       "title": "Jane Eyre",
       "setting": "llm",
       "nodes": 40,
-      "edges": 190,
+      "edges": 192,
       "chapters": 37,
-      "elapsed_seconds": 15.78,
+      "elapsed_seconds": 18.43,
       "top_detected": [
         "Edward Rochester",
         "Jane Eyre",
@@ -955,8 +955,8 @@
         "St John Rivers",
         "Blanche Ingram",
         "Mary Rivers",
-        "Diana Rivers",
-        "Mrs Reed"
+        "Helen Burns",
+        "Diana Rivers"
       ],
       "detected_top_10": [
         "Edward Rochester",
@@ -967,8 +967,8 @@
         "St John Rivers",
         "Blanche Ingram",
         "Mary Rivers",
-        "Diana Rivers",
-        "Mrs Reed"
+        "Helen Burns",
+        "Diana Rivers"
       ],
       "reference_characters": [
         "Jane Eyre",
@@ -995,7 +995,7 @@
       "precision_at_10": 1.0,
       "recall_at_5": 0.4,
       "recall_at_10": 0.8,
-      "recall_at_20": 0.85,
+      "recall_at_20": 0.8,
       "character_recall": 1.0,
       "edge_recall": 0.95,
       "protagonist": "Jane Eyre",

@@ -140,7 +140,7 @@ AILT9019-G65/
 │   ├── cli.py                   headless runner (HTML/PNG/CSV/JSON)
 │   ├── character_network/       analysis package (see Demo/README.md for the module map)
 │   ├── sample_data/             sample story + Pride and Prejudice chapters I–III
-│   ├── tests/                   107 pytest tests, including Streamlit UI tests
+│   ├── tests/                   110 pytest cases (107 test functions), including Streamlit UI tests
 │   └── requirements.txt         pinned dependencies
 ├── evaluation/                  public-domain novels, reference lists, metrics, report
 ├── examples/                    example input → expected output artifacts
@@ -153,7 +153,7 @@ AILT9019-G65/
 
 ```bash
 cd Demo
-python -m pytest -q      # 107 passed
+python -m pytest -q      # 110 passed
 ```
 
 The suite covers decoding and validation, name normalization and merging, chapter
@@ -212,6 +212,6 @@ The **AI cast list** is the one exception, and it is opt-in:
 
 Working prototype for the AILT9019 mid-term check: the end-to-end path (text in,
 interactive graph out) runs from a fresh clone, the evaluation is reproducible with one
-command, and 107 tests pass. Next steps, in order: better ranking of minor versus major
+command, and 110 tests pass. Next steps, in order: better ranking of minor versus major
 characters, an optional relation-type hint from a local language model, and a short
 walkthrough video following [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md).

@@ -108,7 +108,7 @@ If the API is unreachable, the app shows the error and keeps the local result; r
 python -m pytest -q
 ```
 
-107 tests cover input decoding and validation, name normalization and merging,
+110 test cases (107 test functions) cover input decoding and validation, name normalization and merging,
 segmentation, graph construction, the non-overlapping layout, the plotting functions,
 the evaluation metrics, the optional cast-list parser, the CLI, and the Streamlit UI
 (through `streamlit.testing`).
